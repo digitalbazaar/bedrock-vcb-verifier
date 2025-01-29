@@ -1,1 +1,1 @@
-# bedrock-module-template-http
+# bedrock-vcb-verifier
