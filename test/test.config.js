@@ -18,20 +18,3 @@ config['https-agent'].rejectUnauthorized = false;
 
 // disable veres one fetching
 config['did-io'].methodOverrides.v1.disableFetch = true;
-
-const clients = config['vcb-verifier'].authorization.oauth2.clients;
-clients.authorizedClient = {
-  id: 'cbd47e49-8450-43f6-a3ce-072d876e7f62',
-  requestableScopes: [
-    'read:/test-authorize-request',
-    'write:/test-authorize-request'
-  ],
-  secretHash: 'qpMmqCHdQ0FkyVCF1Sfuprt4jKZ4p4Id1LhSLxmdmu8'
-};
-clients.unauthorizedClient = {
-  id: '5165774d-fadc-484b-8a78-d2b049721b52',
-  // no requestable scopes
-  requestableScopes: [],
-  // hash of `client_id`
-  secretHash: 'JySRI3hb_DJ3rV4oUulOowEcLkRS4DCMdnfzJx57Z3g'
-};
