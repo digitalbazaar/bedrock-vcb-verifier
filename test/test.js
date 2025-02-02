@@ -3,10 +3,11 @@
  */
 import * as bedrock from '@bedrock/core';
 import {
-  addTypeTables, addVerifyRoutes, documentLoaders, verify
+  addTypeTables, documentLoaders, middleware, verify
 } from '@bedrock/vcb-verifier';
 import {asyncHandler} from '@bedrock/express';
 import canonicalize from 'canonicalize';
+import cors from 'cors';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 import {randomUUID} from 'node:crypto';
@@ -64,22 +65,27 @@ bedrock.events.on('bedrock-express.configure.routes', app => {
   const target = `${baseUri}/workflows/1/exchanges`;
   const capability = `urn:zcap:root:${encodeURIComponent(target)}`;
 
-  addVerifyRoutes({
-    app,
-    getVerifyOptions() {
-      return {
-        documentLoader,
-        async verifyCredential({credential}) {
-          const credentialType = credential.type.at(-1);
-          // optical barcode credential Type
-          if(credentialType !== 'OpticalBarcodeCredential') {
-            throw new Error(`Unknown credential type "${credentialType}".`);
+  // verify a VCB
+  const route = '/features/verify-vcb';
+  app.options(route, cors());
+  app.post(
+    route,
+    cors(),
+    middleware.createVerifyVcb({
+      getVerifyOptions() {
+        return {
+          documentLoader,
+          async verifyCredential({credential}) {
+            const credentialType = credential.type.at(-1);
+            // optical barcode credential Type
+            if(credentialType !== 'OpticalBarcodeCredential') {
+              throw new Error(`Unknown credential type "${credentialType}".`);
+            }
+            return verify({credential, capability});
           }
-          return verify({credential, capability});
-        }
-      };
-    }
-  });
+        };
+      }
+    }));
 
   // setup mock VC-API exchange server...
   app.post('/workflows/1/exchanges', asyncHandler(async (req, res) => {
