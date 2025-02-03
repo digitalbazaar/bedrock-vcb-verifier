@@ -54,7 +54,7 @@ bedrock.events.on('bedrock.init', async () => {
     ['https://w3id.org/utopia/v2',
       path.join(__dirname, '/contexts/utopia-v2.jsonld')]
   ]);
-  documentLoaders.create({name: 'test', contextMap});
+  await documentLoaders.create({name: 'test', contextMap});
 });
 
 bedrock.events.on('bedrock-express.configure.routes', app => {
