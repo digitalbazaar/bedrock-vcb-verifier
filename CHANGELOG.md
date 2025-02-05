@@ -1,6 +1,6 @@
 # bedrock-vcb-verifier ChangeLog
 
-## 1.1.0 - 2025-02-dd
+## 1.1.0 - 2025-02-05
 
 ### Updated
 - Add `documentMap` name for use with `documentLoaders.create()` indicating
