@@ -1,6 +1,6 @@
 # bedrock-vcb-verifier ChangeLog
 
-## 1.0.1 - 2025-02-xx
+## 1.0.1 - 2025-02-05
 
 ### Updated
 - Add optional chaining to response object.
