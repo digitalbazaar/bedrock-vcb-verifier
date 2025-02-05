@@ -48,13 +48,13 @@ bedrock.events.on('bedrock.init', async () => {
   addTypeTables({registryEntryMap});
 
   // setup document loaders
-  const contextMap = new Map([
+  const documentMap = new Map([
     ['https://w3id.org/vc-barcodes/v1',
       path.join(__dirname, '/contexts/vc-barcodes-v1.jsonld')],
     ['https://w3id.org/utopia/v2',
       path.join(__dirname, '/contexts/utopia-v2.jsonld')]
   ]);
-  await documentLoaders.create({name: 'test', contextMap});
+  await documentLoaders.create({name: 'test', documentMap});
 });
 
 bedrock.events.on('bedrock-express.configure.routes', app => {
