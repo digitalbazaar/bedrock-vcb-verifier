@@ -2,12 +2,6 @@
 
 ## 1.0.1 - 2025-02-xx
 
-### Added
-
-- Add test dependencies:
-  - `@digitalbazaar/ezcap`
-  - `@digitalbazaar/vpqr`
-
 ### Updated
 
 - Add optional chaining to response object.
