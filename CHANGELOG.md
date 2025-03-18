@@ -22,6 +22,7 @@
   instead `barcodeToEnvelopedCredential` should be used to produce an
   `EnvelopedVerifiableCredential` without the need for any local CBOR-LD
   configuration.
+- Accept `type` field to differentiate between scanned barcode types.
 
 ## 1.1.0 - 2025-02-05
 
