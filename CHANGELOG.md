@@ -1,5 +1,10 @@
 # bedrock-vcb-verifier ChangeLog
 
+## 1.2.0 - 2025-03-xx
+
+### Updated
+- Accept `type` field to differentiate between scanned barcode types.
+
 ## 1.1.0 - 2025-02-05
 
 ### Updated
