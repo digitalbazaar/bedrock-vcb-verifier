@@ -39,9 +39,9 @@ export const verifyBody = {
             'unknown',
             'upc_a',
             'upc_e',
-          ],
-        },
-      },
+          ]
+        }
+      }
     },
     // allow use of conneg w/non-JSON payload
     text: {
