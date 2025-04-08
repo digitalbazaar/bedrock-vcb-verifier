@@ -14,17 +14,18 @@ export const verifyBody = {
       properties: {
         data: {
           title: 'Data from barcode scan',
-          type: 'string',
+          type: 'string'
         },
         media_type: {
           title: 'Media type of the scanned barcode',
-          type: 'string',
+          type: 'string'
         },
         format: {
           title: 'Format of the scanned barcode',
           type: 'string',
           enum: [
-            // See https://wicg.github.io/shape-detection-api/#barcodeformat-section
+            // eslint-disable-next-line max-len
+            // see https://wicg.github.io/shape-detection-api/#barcodeformat-section
             'aztec',
             'code_128',
             'code_39',
@@ -38,15 +39,14 @@ export const verifyBody = {
             'qr_code',
             'unknown',
             'upc_a',
-            'upc_e',
+            'upc_e'
           ]
         }
       }
     },
-    // allow use of conneg w/non-JSON payload
     text: {
       title: 'Text encoding of a VCB',
-      type: 'string',
-    },
-  },
+      type: 'string'
+    }
+  }
 };
