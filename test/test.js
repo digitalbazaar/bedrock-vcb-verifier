@@ -3,7 +3,10 @@
  */
 import * as bedrock from '@bedrock/core';
 import {
-  addTypeTables, documentLoaders, middleware, verify
+  addTypeTables,
+  barcodeToCredential,
+  barcodeToEnvelopedCredential,
+  documentLoaders, middleware, verify
 } from '@bedrock/vcb-verifier';
 import {asyncHandler} from '@bedrock/express';
 import canonicalize from 'canonicalize';
@@ -49,8 +52,6 @@ bedrock.events.on('bedrock.init', async () => {
 
   // setup document loaders
   const documentMap = new Map([
-    ['https://w3id.org/vc-barcodes/v1',
-      path.join(__dirname, '/contexts/vc-barcodes-v1.jsonld')],
     ['https://w3id.org/utopia/v2',
       path.join(__dirname, '/contexts/utopia-v2.jsonld')]
   ]);
@@ -66,10 +67,29 @@ bedrock.events.on('bedrock-express.configure.routes', app => {
   const capability = `urn:zcap:root:${encodeURIComponent(target)}`;
 
   // verify a VCB
-  const route = '/features/verify-vcb';
-  app.options(route, cors());
+  const verifyVcbRoute = '/features/verify-vcb';
+  app.options(verifyVcbRoute, cors());
   app.post(
-    route,
+    verifyVcbRoute,
+    cors(),
+    middleware.createVerifyVcb({
+      getVerifyOptions() {
+        return {
+          // use preferred `barcodeToEnvelopedCredential` method
+          barcodeToCredential: barcodeToEnvelopedCredential,
+          documentLoader,
+          async verifyCredential({credential}) {
+            return verify({credential, capability});
+          }
+        };
+      }
+    }));
+
+  // legacy verify a VCB
+  const legacyVerifyVcbRoute = '/features/legacy-verify-vcb';
+  app.options(legacyVerifyVcbRoute, cors());
+  app.post(
+    legacyVerifyVcbRoute,
     cors(),
     middleware.createVerifyVcb({
       getVerifyOptions() {
@@ -121,11 +141,35 @@ bedrock.events.on('bedrock-express.configure.routes', app => {
       }
 
       // only "verify" specific VC
-      const {
+      let {
         verifiablePresentation: {
           verifiableCredential: [verifiableCredential]
         }
       } = req.body;
+
+      // parse enveloped VC
+      if(verifiableCredential.type === 'EnvelopedVerifiableCredential') {
+        const {contents, format} = _parseEnvelope({
+          envelope: verifiableCredential
+        });
+        if(format.typeAndSubType !== 'application/vcb') {
+          throw new BedrockError('Verification error.', {
+            name: 'DataError',
+            details: {httpStatusCode: 400, public: true}
+          });
+        }
+        const barcode = {
+          data: contents,
+          type: format.parameters.get('barcode') ?? 'qr_code'
+        };
+        if(format.parameters.has('base64')) {
+          barcode.data = new Uint8Array(Buffer.from(contents, 'base64'));
+        }
+        ({credential: verifiableCredential} = await barcodeToCredential({
+          barcode, documentLoader
+        }));
+      }
+
       if(canonicalize(mockData.verifiableCredential) !==
         canonicalize(verifiableCredential)) {
         throw new BedrockError('Verification error.', {
@@ -144,3 +188,20 @@ bedrock.events.on('bedrock-express.configure.routes', app => {
 
 import '@bedrock/test';
 bedrock.start();
+
+function _parseEnvelope({envelope}) {
+  const {id} = envelope;
+  const format = {};
+  const comma = id.indexOf(',');
+  if(id.startsWith('data:') && comma !== -1) {
+    const mediaType = id.slice('data:'.length, comma);
+    const parts = mediaType.split(';');
+    format.mediaType = mediaType;
+    format.typeAndSubType = parts.shift();
+    const [type, subType] = format.typeAndSubType.split('/');
+    format.type = type;
+    format.subType = subType;
+    format.parameters = new Map(parts.map(s => s.trim().split('=')));
+  }
+  return {contents: id.slice(comma + 1), format};
+}
