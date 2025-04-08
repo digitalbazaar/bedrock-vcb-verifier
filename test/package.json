@@ -23,6 +23,7 @@
     "@bedrock/server": "^5.1.0",
     "@bedrock/test": "^8.2.0",
     "@bedrock/validation": "^7.1.0",
+    "@bedrock/vc-barcodes-context": "^1.0.0",
     "@bedrock/vcb-verifier": "file:..",
     "@bedrock/veres-one-context": "^16.0.0",
     "@digitalbazaar/http-client": "^4.1.1",

@@ -46,7 +46,8 @@
     "@bedrock/jsonld-document-loader": "^5.2.0",
     "@bedrock/security-context": "^9.0.0",
     "@bedrock/validation": "^7.1.0",
-    "@bedrock/veres-one-context": "^16.0.0"
+    "@bedrock/veres-one-context": "^16.0.0",
+    "@bedrock/vc-barcodes-context": "^1.0.0"
   },
   "directories": {
     "lib": "./lib"
