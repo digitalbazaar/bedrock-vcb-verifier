@@ -77,7 +77,6 @@ bedrock.events.on('bedrock-express.configure.routes', app => {
         return {
           // use preferred `barcodeToEnvelopedCredential` method
           barcodeToCredential: barcodeToEnvelopedCredential,
-          documentLoader,
           async verifyCredential({credential}) {
             return verify({credential, capability});
           }
