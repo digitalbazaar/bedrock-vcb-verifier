@@ -159,7 +159,7 @@ bedrock.events.on('bedrock-express.configure.routes', app => {
         }
         const barcode = {
           data: contents,
-          format: format.parameters.get('barcode') ?? 'qr_code'
+          format: format.parameters.get('barcode-format') ?? 'qr_code'
         };
         if(format.parameters.has('base64')) {
           barcode.data = new Uint8Array(Buffer.from(contents, 'base64'));
