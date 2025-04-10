@@ -1,6 +1,6 @@
 # bedrock-vcb-verifier ChangeLog
 
-## 1.2.0 - 2025-mm-dd
+## 1.2.0 - 2025-04-10
 
 ### Added
 - Add option to return a `barcodeToCredential` function from
