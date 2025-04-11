@@ -1,6 +1,6 @@
 # bedrock-vcb-verifier ChangeLog
 
-## 1.2.1 - 2025-04-dd
+## 1.2.1 - 2025-04-11
 
 ### Fixed
 - Use array to express `@context` w/`EnvelopedVerifiableCredential`.
