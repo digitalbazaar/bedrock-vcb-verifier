@@ -1,5 +1,11 @@
 # bedrock-vcb-verifier ChangeLog
 
+## 1.3.0 - 2025-mm-dd
+
+### Added
+- Add `maxClockSkew=300` (300 seconds) option for checking credential
+  expiration period.
+
 ## 1.2.1 - 2025-04-11
 
 ### Fixed
