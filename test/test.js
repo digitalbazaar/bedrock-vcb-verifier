@@ -108,7 +108,7 @@ bedrock.events.on('bedrock-express.configure.routes', app => {
 
   // setup mock VC-API exchange server...
   app.post('/workflows/1/exchanges', asyncHandler(async (req, res) => {
-    const {variables} = req.body;
+    const {variables = {}} = req.body;
     const exchange = {
       id: randomUUID(),
       // 15 minute expiry in seconds
@@ -140,11 +140,10 @@ bedrock.events.on('bedrock-express.configure.routes', app => {
       }
 
       // only "verify" specific VC
+      const {verifiablePresentation} = req.body;
       let {
-        verifiablePresentation: {
-          verifiableCredential: [verifiableCredential]
-        }
-      } = req.body;
+        verifiableCredential: [verifiableCredential]
+      } = verifiablePresentation;
 
       // parse enveloped VC
       if(verifiableCredential.type === 'EnvelopedVerifiableCredential') {
@@ -177,11 +176,39 @@ bedrock.events.on('bedrock-express.configure.routes', app => {
         });
       }
 
+      exchange.variables.results = {
+        verify: {
+          verifiablePresentation: {
+            ...verifiablePresentation,
+            verifiableCredential: [mockData.verifiableCredential]
+          }
+        }
+      };
+
       // complete exchange
       exchange.state = 'complete';
 
       // nothing to return, verification successful
       res.json({});
+    }));
+
+  app.get(
+    '/workflows/1/exchanges/:localExchangeId',
+    asyncHandler(async (req, res) => {
+      const {localExchangeId} = req.params;
+      let exchange = EXCHANGES.get(localExchangeId);
+      if(!exchange) {
+        throw new BedrockError(
+          `Exchange "${localExchangeId}" not found.`, {
+            name: 'NotFoundError',
+            details: {httpStatusCode: 404, public: true}
+          });
+      }
+      exchange = {
+        ...exchange,
+        id: `${target}/${localExchangeId}`
+      };
+      res.json({exchange});
     }));
 });
 
