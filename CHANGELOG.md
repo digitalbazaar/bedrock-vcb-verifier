@@ -5,6 +5,12 @@
 ### Added
 - Add `maxClockSkew=300` (300 seconds) option for checking credential
   expiration period.
+- Add `returnExchange=false` option to return the retrieved exchange
+  state from `verify()`.
+
+### Changed
+- For enveloped credentials, return the unenveloped `credential` in the
+  result returned from `verify()`.
 
 ## 1.2.1 - 2025-04-11
 
