@@ -1,6 +1,6 @@
 # bedrock-vcb-verifier ChangeLog
 
-## 1.3.1 - 2025-04-xx
+## 1.3.1 - 2025-04-17
 
 ### Fixed
 - Return the unenveloped `credential` in the result returned from `verify()`.
