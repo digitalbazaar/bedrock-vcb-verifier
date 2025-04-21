@@ -1,6 +1,6 @@
 # bedrock-vcb-verifier ChangeLog
 
-## 1.3.2 - 2025-04-dd
+## 1.3.2 - 2025-04-21
 
 ### Fixed
 - Always base64-encode QR code VCBs to ensure proper data URL construction.
