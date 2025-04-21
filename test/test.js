@@ -25,6 +25,8 @@ import {mockData} from './mocha/mock.data.js';
 // in-memory exchanges only used during testing
 const EXCHANGES = new Map();
 
+const TEXT_DECODER = new TextDecoder();
+
 bedrock.events.on('bedrock.init', async () => {
   // setup mock VCB verifier app...
 
@@ -162,6 +164,9 @@ bedrock.events.on('bedrock-express.configure.routes', app => {
         };
         if(format.parameters.has('base64')) {
           barcode.data = new Uint8Array(Buffer.from(contents, 'base64'));
+          if(barcode.format === 'qr_code') {
+            barcode.data = TEXT_DECODER.decode(barcode.data);
+          }
         }
         ({credential: verifiableCredential} = await barcodeToCredential({
           barcode, documentLoader
