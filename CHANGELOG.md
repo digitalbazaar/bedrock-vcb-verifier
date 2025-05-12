@@ -1,9 +1,9 @@
 # bedrock-vcb-verifier ChangeLog
 
-## 1.3.3 - 2025-MM-DD
+## 1.3.3 - 2025-05-12
 
 ### Changed
-- Use `vpqr` 6.0.0.
+- Use `vpqr` 6.0.0. This supports decoding the CBOR-LD 1.0 tag (0xcb1d).
 
 ## 1.3.2 - 2025-04-21
 
