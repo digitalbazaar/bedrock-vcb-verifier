@@ -1,5 +1,10 @@
 # bedrock-vcb-verifier ChangeLog
 
+## 1.3.3 - 2025-MM-DD
+
+### Changed
+- Use `vpqr` 6.0.0.
+
 ## 1.3.2 - 2025-04-21
 
 ### Fixed
