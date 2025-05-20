@@ -1,5 +1,10 @@
 # bedrock-vcb-verifier ChangeLog
 
+## 1.3.4 - 2025-05-xx
+
+### Changed
+- Return credential in results when verification error occurs.
+
 ## 1.3.3 - 2025-05-12
 
 ### Changed
