@@ -10,9 +10,11 @@ import {mockData} from './mock.data.js';
 describe('http API', () => {
   describe('verify a VCB', () => {
     const target = '/features/verify-vcb';
-    let url;
+    const customSchemaTarget = '/features/verify-vcb/custom-schema';
+    let url; let customSchemaUrl;
     before(async () => {
       url = `${bedrock.config.server.baseUri}${target}`;
+      customSchemaUrl = `${bedrock.config.server.baseUri}${customSchemaTarget}`;
     });
 
     it('verifies VCB "text" transformed to an enveloped VC', async () => {
@@ -53,6 +55,32 @@ describe('http API', () => {
       assertNoError(err);
       should.exist(result);
       result.should.include.keys(['credential', 'verified', 'expired']);
+      result.verified.should.equal(true);
+    });
+
+    it('use custom schema and req body', async () => {
+      let err;
+      let result;
+      try {
+        const response = await httpClient.post(customSchemaUrl, {
+          agent: httpsAgent,
+          json: {
+            barcode: {
+              data: mockData.vcbText,
+              format: 'qr_code',
+              scanLocation: '43.769562, 11.255814'
+            }
+          }
+        });
+        result = response.data;
+      } catch(e) {
+        err = e;
+      }
+      assertNoError(err);
+      should.exist(result);
+      result.should.include.keys([
+        'credential', 'verified', 'expired', 'scanLocation'
+      ]);
       result.verified.should.equal(true);
     });
   });
