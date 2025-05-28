@@ -11,7 +11,8 @@ describe('http API', () => {
   describe('verify a VCB', () => {
     const target = '/features/verify-vcb';
     const customSchemaTarget = '/features/verify-vcb/custom-schema';
-    let url; let customSchemaUrl;
+    let url;
+    let customSchemaUrl;
     before(async () => {
       url = `${bedrock.config.server.baseUri}${target}`;
       customSchemaUrl = `${bedrock.config.server.baseUri}${customSchemaTarget}`;

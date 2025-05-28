@@ -1,10 +1,5 @@
 # bedrock-vcb-verifier ChangeLog
 
-## 1.5.1 - 2025-05-dd
-
-### Added
-- Add test for a custom schema and accessed req object in route handler.
-
 ## 1.5.0 - 2025-05-28
 
 ### Changed
