@@ -2,6 +2,7 @@
  * Copyright (c) 2024-2025 Digital Bazaar, Inc. All rights reserved.
  */
 import * as bedrock from '@bedrock/core';
+import * as schemas from '../schemas/bedrock-vcb-verifier.js';
 import {
   addTypeTables,
   barcodeToCredential,
@@ -81,6 +82,29 @@ bedrock.events.on('bedrock-express.configure.routes', app => {
           barcodeToCredential: barcodeToEnvelopedCredential,
           async verifyCredential({credential}) {
             return verify({credential, capability});
+          }
+        };
+      }
+    }));
+
+  // verify a VCB with custom schema and access req object
+  const customSchema = {...schemas.verifyBody};
+  customSchema.properties.barcode.additionalProperties = true;
+  const verifyVcbRouteCustomSchema = '/features/verify-vcb/custom-schema';
+  app.options(verifyVcbRouteCustomSchema, cors());
+  app.post(
+    verifyVcbRouteCustomSchema,
+    cors(),
+    middleware.createVerifyVcb({
+      validation: {verifyBodySchema: customSchema},
+      getVerifyOptions({req}) {
+        const {scanLocation} = req.body.barcode;
+        return {
+          // use preferred `barcodeToEnvelopedCredential` method
+          barcodeToCredential: barcodeToEnvelopedCredential,
+          async verifyCredential({credential}) {
+            const result = await verify({credential, capability});
+            return {...result, scanLocation};
           }
         };
       }
