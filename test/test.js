@@ -88,8 +88,8 @@ bedrock.events.on('bedrock-express.configure.routes', app => {
     }));
 
   // verify a VCB with custom schema and access req object
-  const customSchema = {...schemas.verifyBody};
-  customSchema.properties.barcode.additionalProperties = true;
+  const customSchema = structuredClone(schemas.verifyBody);
+  customSchema.additionalProperties = true;
   const verifyVcbRouteCustomSchema = '/features/verify-vcb/custom-schema';
   app.options(verifyVcbRouteCustomSchema, cors());
   app.post(
@@ -98,7 +98,7 @@ bedrock.events.on('bedrock-express.configure.routes', app => {
     middleware.createVerifyVcb({
       validation: {verifyBodySchema: customSchema},
       getVerifyOptions({req}) {
-        const {scanLocation} = req.body.barcode;
+        const {scanLocation} = req.body;
         return {
           // use preferred `barcodeToEnvelopedCredential` method
           barcodeToCredential: barcodeToEnvelopedCredential,
