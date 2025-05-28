@@ -73,9 +73,9 @@ describe('http API', () => {
           json: {
             barcode: {
               data: mockData.vcbText,
-              format: 'qr_code',
-              scanLocation
-            }
+              format: 'qr_code'
+            },
+            scanLocation
           }
         });
         result = response.data;
