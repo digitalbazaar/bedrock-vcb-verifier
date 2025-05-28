@@ -63,13 +63,18 @@ describe('http API', () => {
       let err;
       let result;
       try {
+        const scanLocation = {
+          position: {
+            coords: {latitude: 43.769562, longitude: 11.255814}
+          }
+        };
         const response = await httpClient.post(customSchemaUrl, {
           agent: httpsAgent,
           json: {
             barcode: {
               data: mockData.vcbText,
               format: 'qr_code',
-              scanLocation: '43.769562, 11.255814'
+              scanLocation
             }
           }
         });
