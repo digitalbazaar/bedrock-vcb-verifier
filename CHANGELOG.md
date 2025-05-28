@@ -1,6 +1,6 @@
 # bedrock-vcb-verifier ChangeLog
 
-## 1.5.0 - 2025-05-dd
+## 1.5.0 - 2025-05-28
 
 ### Changed
 - Pass `req`, `barcode` to `getVerifyOptions`; allow custom verify body schemas.
