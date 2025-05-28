@@ -1,5 +1,10 @@
 # bedrock-vcb-verifier ChangeLog
 
+## 1.5.0 - 2025-05-dd
+
+### Changed
+- Pass req to getVerifyOptions and allow custom verify body schemas.
+
 ## 1.4.0 - 2025-05-20
 
 ### Added
