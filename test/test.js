@@ -7,6 +7,7 @@ import {
   addTypeTables,
   barcodeToCredential,
   barcodeToEnvelopedCredential,
+  barcodeToEnvelopedPresentation,
   documentLoaders, middleware, verify
 } from '@bedrock/vcb-verifier';
 import {asyncHandler} from '@bedrock/express';
@@ -71,7 +72,7 @@ bedrock.events.on('bedrock-express.configure.routes', app => {
   const target = `${baseUri}/workflows/1/exchanges`;
   const capability = `urn:zcap:root:${encodeURIComponent(target)}`;
 
-  // verify a VCB
+  // verify a VCB credential or presentation
   const verifyVcbRoute = '/features/verify-vcb';
   app.options(verifyVcbRoute, cors());
   app.post(
@@ -84,6 +85,10 @@ bedrock.events.on('bedrock-express.configure.routes', app => {
           barcodeToCredential: barcodeToEnvelopedCredential,
           async verifyCredential({credential}) {
             return verify({credential, capability});
+          },
+          barcodeToPresentation: barcodeToEnvelopedPresentation,
+          async verifyPresentation({presentation}) {
+            return verify({presentation, capability});
           }
         };
       }
@@ -166,17 +171,11 @@ bedrock.events.on('bedrock-express.configure.routes', app => {
             details: {httpStatusCode: 404, public: true}
           });
       }
-
-      // only "verify" specific VC
+      let verifiableCredential;
       const {verifiablePresentation} = req.body;
-      let {
-        verifiableCredential: [verifiableCredential]
-      } = verifiablePresentation;
-
-      // parse enveloped VC
-      if(verifiableCredential.type === 'EnvelopedVerifiableCredential') {
+      if(verifiablePresentation.type === 'EnvelopedVerifiablePresentation') {
         const {contents, format} = _parseEnvelope({
-          envelope: verifiableCredential
+          envelope: verifiablePresentation
         });
         if(format.typeAndSubType !== 'application/vcb') {
           throw new BedrockError('Verification error.', {
@@ -195,16 +194,49 @@ bedrock.events.on('bedrock-express.configure.routes', app => {
           }
         }
         ({credential: verifiableCredential} = await barcodeToCredential({
-          barcode, documentLoader
+          barcode, documentLoader, expectedHeader: 'VP1-'
         }));
-      }
-
-      if(canonicalize(mockData.verifiableCredential) !==
+        if(canonicalize(mockData.vpVerifiableCredential) !==
         canonicalize(verifiableCredential)) {
-        throw new BedrockError('Verification error.', {
-          name: 'DataError',
-          details: {httpStatusCode: 400, public: true}
-        });
+          throw new BedrockError('Verification error.', {
+            name: 'DataError',
+            details: {httpStatusCode: 400, public: true}
+          });
+        }
+      } else {
+        verifiableCredential = verifiablePresentation.verifiableCredential[0];
+        // parse enveloped VC
+        if(verifiableCredential.type === 'EnvelopedVerifiableCredential') {
+          const {contents, format} = _parseEnvelope({
+            envelope: verifiableCredential
+          });
+          if(format.typeAndSubType !== 'application/vcb') {
+            throw new BedrockError('Verification error.', {
+              name: 'DataError',
+              details: {httpStatusCode: 400, public: true}
+            });
+          }
+          const barcode = {
+            data: contents,
+            format: format.parameters.get('barcode-format') ?? 'qr_code'
+          };
+          if(format.parameters.has('base64')) {
+            barcode.data = new Uint8Array(Buffer.from(contents, 'base64'));
+            if(barcode.format === 'qr_code') {
+              barcode.data = TEXT_DECODER.decode(barcode.data);
+            }
+          }
+          ({credential: verifiableCredential} = await barcodeToCredential({
+            barcode, documentLoader, expectedHeader: 'VC1-'
+          }));
+        }
+        if(canonicalize(mockData.verifiableCredential) !==
+        canonicalize(verifiableCredential)) {
+          throw new BedrockError('Verification error.', {
+            name: 'DataError',
+            details: {httpStatusCode: 400, public: true}
+          });
+        }
       }
 
       exchange.variables.results = {
