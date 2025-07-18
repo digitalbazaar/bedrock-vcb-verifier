@@ -24,7 +24,7 @@ describe('http API', () => {
       try {
         const response = await httpClient.post(url, {
           agent: httpsAgent,
-          json: {text: mockData.vcbText}
+          json: {text: mockData.vcbCredential}
         });
         result = response.data;
       } catch(e) {
@@ -44,7 +44,7 @@ describe('http API', () => {
           agent: httpsAgent,
           json: {
             barcode: {
-              data: mockData.vcbText,
+              data: mockData.vcbCredential,
               format: 'qr_code'
             }
           }
@@ -59,7 +59,7 @@ describe('http API', () => {
       result.verified.should.equal(true);
     });
 
-    it('use custom schema and req body', async () => {
+    it('use custom schema and req body with enveloped VC', async () => {
       let err;
       let result;
       try {
@@ -72,7 +72,7 @@ describe('http API', () => {
           agent: httpsAgent,
           json: {
             barcode: {
-              data: mockData.vcbText,
+              data: mockData.vcbCredential,
               format: 'qr_code'
             },
             scanLocation
@@ -87,6 +87,47 @@ describe('http API', () => {
       result.should.include.keys([
         'credential', 'verified', 'expired', 'scanLocation'
       ]);
+      result.verified.should.equal(true);
+    });
+
+    it('verifies VCB "text" transformed to an enveloped VP', async () => {
+      let err;
+      let result;
+      try {
+        const response = await httpClient.post(url, {
+          agent: httpsAgent,
+          json: {text: mockData.vcbPresentation}
+        });
+        result = response.data;
+      } catch(e) {
+        err = e;
+      }
+      assertNoError(err);
+      should.exist(result);
+      result.should.include.keys(['credential', 'verified', 'expired']);
+      result.verified.should.equal(true);
+    });
+
+    it('verifies VCB "barcode" transformed to an enveloped VP', async () => {
+      let err;
+      let result;
+      try {
+        const response = await httpClient.post(url, {
+          agent: httpsAgent,
+          json: {
+            barcode: {
+              data: mockData.vcbPresentation,
+              format: 'qr_code'
+            }
+          }
+        });
+        result = response.data;
+      } catch(e) {
+        err = e;
+      }
+      assertNoError(err);
+      should.exist(result);
+      result.should.include.keys(['credential', 'verified', 'expired']);
       result.verified.should.equal(true);
     });
   });
@@ -104,7 +145,7 @@ describe('http API', () => {
       try {
         const response = await httpClient.post(url, {
           agent: httpsAgent,
-          json: {text: mockData.vcbText}
+          json: {text: mockData.vcbCredential}
         });
         result = response.data;
       } catch(e) {
