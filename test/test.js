@@ -8,6 +8,7 @@ import {
   barcodeToCredential,
   barcodeToEnvelopedCredential,
   barcodeToEnvelopedPresentation,
+  barcodeToJsonldDocument,
   documentLoaders, middleware, verify
 } from '@bedrock/vcb-verifier';
 import {asyncHandler} from '@bedrock/express';
@@ -193,16 +194,21 @@ bedrock.events.on('bedrock-express.configure.routes', app => {
             barcode.data = TEXT_DECODER.decode(barcode.data);
           }
         }
-        ({credential: verifiableCredential} = await barcodeToCredential({
+        const {jsonldDocument} = await barcodeToJsonldDocument({
           barcode, documentLoader, expectedHeader: 'VP1-'
-        }));
-        if(canonicalize(mockData.vpVerifiableCredential) !==
-        canonicalize(verifiableCredential)) {
+        });
+        if(canonicalize(mockData.verifiablePresentation) !==
+        canonicalize(jsonldDocument)) {
           throw new BedrockError('Verification error.', {
             name: 'DataError',
             details: {httpStatusCode: 400, public: true}
           });
         }
+        exchange.variables.results = {
+          verify: {
+            verifiablePresentation: jsonldDocument
+          }
+        };
       } else {
         verifiableCredential = verifiablePresentation.verifiableCredential[0];
         // parse enveloped VC
@@ -227,7 +233,7 @@ bedrock.events.on('bedrock-express.configure.routes', app => {
             }
           }
           ({credential: verifiableCredential} = await barcodeToCredential({
-            barcode, documentLoader, expectedHeader: 'VC1-'
+            barcode, documentLoader
           }));
         }
         if(canonicalize(mockData.verifiableCredential) !==
@@ -237,17 +243,15 @@ bedrock.events.on('bedrock-express.configure.routes', app => {
             details: {httpStatusCode: 400, public: true}
           });
         }
-      }
-
-      exchange.variables.results = {
-        verify: {
-          verifiablePresentation: {
-            ...verifiablePresentation,
-            verifiableCredential: [mockData.verifiableCredential]
+        exchange.variables.results = {
+          verify: {
+            verifiablePresentation: {
+              ...verifiablePresentation,
+              verifiableCredential: [mockData.verifiableCredential]
+            }
           }
-        }
-      };
-
+        };
+      }
       // complete exchange
       exchange.state = 'complete';
 
