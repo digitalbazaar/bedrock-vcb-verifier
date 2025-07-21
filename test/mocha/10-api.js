@@ -104,7 +104,7 @@ describe('http API', () => {
       }
       assertNoError(err);
       should.exist(result);
-      result.should.include.keys(['credential', 'verified', 'expired']);
+      result.should.include.keys(['presentation', 'verified', 'expired']);
       result.verified.should.equal(true);
     });
 
@@ -127,7 +127,7 @@ describe('http API', () => {
       }
       assertNoError(err);
       should.exist(result);
-      result.should.include.keys(['credential', 'verified', 'expired']);
+      result.should.include.keys(['presentation', 'verified', 'expired']);
       result.verified.should.equal(true);
     });
   });
