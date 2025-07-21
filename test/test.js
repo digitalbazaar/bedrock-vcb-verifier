@@ -61,6 +61,8 @@ bedrock.events.on('bedrock.init', async () => {
       path.join(__dirname, '/contexts/utopia-v2.jsonld')],
     ['https://w3id.org/age/v1',
       path.join(__dirname, '/contexts/age-v1.jsonld')],
+    ['https://w3id.org/cit/v1',
+      path.join(__dirname, '/contexts/cit-v1.jsonld')]
   ]);
   await documentLoaders.create({name: 'test', documentMap});
 });
