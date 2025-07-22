@@ -203,7 +203,16 @@ bedrock.events.on('bedrock-express.configure.routes', app => {
           canonicalize(jsonldDocument)) {
           throw new BedrockError('Verification error.', {
             name: 'DataError',
-            details: {httpStatusCode: 400, public: true}
+            details: {
+              httpStatusCode: 400,
+              public: true,
+              // this matches the bedrock-vc-verifier output for
+              // an invalid signature on a VC in a VP
+              presentationResult: {
+                verified: false,
+                results: [jsonldDocument]
+              }
+            }
           });
         }
         exchange.variables.results = {
