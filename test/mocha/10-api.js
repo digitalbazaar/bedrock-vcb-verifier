@@ -128,6 +128,32 @@ describe('http API', () => {
       result.should.include.keys(['presentation', 'verified']);
       result.verified.should.equal(true);
     });
+
+    it('fails to verify a VCB barcode containing an enveloped VP' +
+      'with a VC with a bad signature', async () => {
+      let err;
+      let result;
+      try {
+        const response = await httpClient.post(url, {
+          agent: httpsAgent,
+          json: {
+            barcode: {
+              data: mockData.badSignatureVcbPresentationText,
+              format: 'qr_code'
+            }
+          }
+        });
+        result = response.data;
+      } catch(e) {
+        err = e;
+      }
+      assertNoError(err);
+      should.exist(result);
+      result.should.include.keys(['presentation', 'verified', 'error' ]);
+      result.verified.should.equal(false);
+      result.presentation.should.be.an('object');
+      result.error.should.be.an('object');
+    });
   });
 
   describe('(legacy) verify a VCB', () => {
