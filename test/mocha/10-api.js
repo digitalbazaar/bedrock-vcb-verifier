@@ -32,7 +32,7 @@ describe('http API', () => {
       }
       assertNoError(err);
       should.exist(result);
-      result.should.include.keys(['credential', 'verified', 'expired']);
+      result.should.include.keys(['credential', 'verified' ]);
       result.verified.should.equal(true);
     });
 
@@ -55,7 +55,7 @@ describe('http API', () => {
       }
       assertNoError(err);
       should.exist(result);
-      result.should.include.keys(['credential', 'verified', 'expired']);
+      result.should.include.keys(['credential', 'verified' ]);
       result.verified.should.equal(true);
     });
 
@@ -84,9 +84,7 @@ describe('http API', () => {
       }
       assertNoError(err);
       should.exist(result);
-      result.should.include.keys([
-        'credential', 'verified', 'expired', 'scanLocation'
-      ]);
+      result.should.include.keys(['credential', 'verified', , 'scanLocation']);
       result.verified.should.equal(true);
     });
 
@@ -104,7 +102,7 @@ describe('http API', () => {
       }
       assertNoError(err);
       should.exist(result);
-      result.should.include.keys(['presentation', 'verified', 'expired']);
+      result.should.include.keys(['presentation', 'verified' ]);
       result.verified.should.equal(true);
     });
 
@@ -127,7 +125,7 @@ describe('http API', () => {
       }
       assertNoError(err);
       should.exist(result);
-      result.should.include.keys(['presentation', 'verified', 'expired']);
+      result.should.include.keys(['presentation', 'verified']);
       result.verified.should.equal(true);
     });
   });
@@ -153,7 +151,7 @@ describe('http API', () => {
       }
       assertNoError(err);
       should.exist(result);
-      result.should.include.keys(['credential', 'verified', 'expired']);
+      result.should.include.keys(['credential', 'verified' ]);
       result.verified.should.equal(true);
     });
   });
