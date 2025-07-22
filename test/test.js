@@ -200,7 +200,7 @@ bedrock.events.on('bedrock-express.configure.routes', app => {
           barcode, documentLoader, expectedHeader: 'VP1-'
         });
         if(canonicalize(mockData.verifiablePresentation) !==
-        canonicalize(jsonldDocument)) {
+          canonicalize(jsonldDocument)) {
           throw new BedrockError('Verification error.', {
             name: 'DataError',
             details: {httpStatusCode: 400, public: true}
