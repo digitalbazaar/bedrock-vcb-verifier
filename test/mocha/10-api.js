@@ -24,7 +24,7 @@ describe('http API', () => {
       try {
         const response = await httpClient.post(url, {
           agent: httpsAgent,
-          json: {text: mockData.vcbCredential}
+          json: {text: mockData.vcbCredentialText}
         });
         result = response.data;
       } catch(e) {
@@ -44,7 +44,7 @@ describe('http API', () => {
           agent: httpsAgent,
           json: {
             barcode: {
-              data: mockData.vcbCredential,
+              data: mockData.vcbCredentialText,
               format: 'qr_code'
             }
           }
@@ -72,7 +72,7 @@ describe('http API', () => {
           agent: httpsAgent,
           json: {
             barcode: {
-              data: mockData.vcbCredential,
+              data: mockData.vcbCredentialText,
               format: 'qr_code'
             },
             scanLocation
@@ -96,7 +96,7 @@ describe('http API', () => {
       try {
         const response = await httpClient.post(url, {
           agent: httpsAgent,
-          json: {text: mockData.vcbPresentation}
+          json: {text: mockData.vcbPresentationText}
         });
         result = response.data;
       } catch(e) {
@@ -116,7 +116,7 @@ describe('http API', () => {
           agent: httpsAgent,
           json: {
             barcode: {
-              data: mockData.vcbPresentation,
+              data: mockData.vcbPresentationText,
               format: 'qr_code'
             }
           }
@@ -145,7 +145,7 @@ describe('http API', () => {
       try {
         const response = await httpClient.post(url, {
           agent: httpsAgent,
-          json: {text: mockData.vcbCredential}
+          json: {text: mockData.vcbCredentialText}
         });
         result = response.data;
       } catch(e) {
