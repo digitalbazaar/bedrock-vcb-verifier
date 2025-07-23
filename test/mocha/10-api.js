@@ -32,7 +32,7 @@ describe('http API', () => {
       }
       assertNoError(err);
       should.exist(result);
-      result.should.include.keys(['credential', 'verified' ]);
+      result.should.include.keys(['credential', 'verified']);
       result.verified.should.equal(true);
     });
 
@@ -55,7 +55,7 @@ describe('http API', () => {
       }
       assertNoError(err);
       should.exist(result);
-      result.should.include.keys(['credential', 'verified' ]);
+      result.should.include.keys(['credential', 'verified']);
       result.verified.should.equal(true);
     });
 
@@ -102,7 +102,7 @@ describe('http API', () => {
       }
       assertNoError(err);
       should.exist(result);
-      result.should.include.keys(['presentation', 'verified' ]);
+      result.should.include.keys(['presentation', 'verified']);
       result.verified.should.equal(true);
     });
 
@@ -129,7 +129,7 @@ describe('http API', () => {
       result.verified.should.equal(true);
     });
 
-    it('fails to verify a VCB barcode containing an enveloped VP' +
+    it('fails to verify a VCB barcode containing an enveloped VP ' +
       'with a VC with a bad signature', async () => {
       let err;
       let result;
@@ -149,7 +149,7 @@ describe('http API', () => {
       }
       assertNoError(err);
       should.exist(result);
-      result.should.include.keys(['presentation', 'verified', 'error' ]);
+      result.should.include.keys(['presentation', 'verified', 'error']);
       result.verified.should.equal(false);
       result.presentation.should.be.an('object');
       result.error.should.be.an('object');
@@ -177,7 +177,7 @@ describe('http API', () => {
       }
       assertNoError(err);
       should.exist(result);
-      result.should.include.keys(['credential', 'verified' ]);
+      result.should.include.keys(['credential', 'verified']);
       result.verified.should.equal(true);
     });
   });
