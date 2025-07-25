@@ -1,6 +1,6 @@
 # bedrock-vcb-verifier ChangeLog
 
-## 1.6.0 - 2025-07-dd
+## 1.6.0 - 2025-07-25
 
 ### Added
 - Verify enveloped verifiable presentations.
