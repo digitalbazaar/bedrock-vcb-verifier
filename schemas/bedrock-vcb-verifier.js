@@ -16,10 +16,6 @@ export const verifyBody = {
           title: 'Data from barcode scan',
           type: 'string'
         },
-        media_type: {
-          title: 'Media type of the scanned barcode',
-          type: 'string'
-        },
         format: {
           title: 'Format of the scanned barcode',
           type: 'string',
