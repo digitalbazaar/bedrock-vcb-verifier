@@ -1,5 +1,10 @@
 # bedrock-vcb-verifier ChangeLog
 
+## 1.6.1 - 2025-mm-dd
+
+### Fixed
+- Remove unusued `media_type` value from schema.
+
 ## 1.6.0 - 2025-07-25
 
 ### Added
