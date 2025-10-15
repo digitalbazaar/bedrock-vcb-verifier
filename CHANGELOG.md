@@ -1,6 +1,6 @@
 # bedrock-vcb-verifier ChangeLog
 
-## 1.6.2 - 2025-10-xx
+## 1.6.2 - 2025-10-15
 
 ### Fixed
 - Fix `@bedrock/app-identity` peer dependency version constraint.
